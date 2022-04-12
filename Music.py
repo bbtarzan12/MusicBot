@@ -3,8 +3,6 @@ import json
 import re
 import time
 import itertools
-from time import strftime
-from tokenize import Number
 from xmlrpc.client import DateTime
 import discord
 import lavalink
@@ -78,8 +76,9 @@ class MusicPlayer(commands.Cog):
     
     async def cog_before_invoke(self, ctx):
         guild_check = ctx.guild is not None
+        bypass_check = ctx.command.name in ('help')
 
-        if guild_check:
+        if guild_check and not bypass_check:
             await self.ensure_voice(ctx)
         
         return guild_check
@@ -269,6 +268,18 @@ class MusicPlayer(commands.Cog):
         await player.stop()
         await ctx.voice_client.disconnect(force=True)
         await ctx.respond('👋 나갈게요!')
+
+    @commands.slash_command(guild_ids=guild_ids, description=f'도움말')
+    async def help(self, ctx):
+        embed = discord.Embed(title="HyePang 명령어 목록")
+        commands = self.get_commands()
+        
+        description = ''
+        for command in commands:
+            description += f"{command.name} : {command.description}\n"
+        
+        embed.description = description
+        return await ctx.respond(embed=embed)
 
 def setup(bot):
     bot.add_cog(MusicPlayer(bot))

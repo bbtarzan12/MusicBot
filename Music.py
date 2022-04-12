@@ -136,11 +136,11 @@ class MusicPlayer(commands.Cog):
                     await channel.send(embed=embed)
             
 
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'안녕하세요!')
     async def hello(self, ctx):
         await ctx.respond(f"👋 안녕하세요 {ctx.author.mention}님!")
 
-    @commands.slash_command(guild_ids=guild_ids, description=f'음악을 재생합니다 제목, URL 등, 모바일이라면 마지막에 스페이스바를 한번 눌러주세요!')
+    @commands.slash_command(guild_ids=guild_ids, description=f'음악을 재생해요. 제목, URL 등, 모바일이라면 마지막에 스페이스바를 한번 눌러주세요!')
     async def play(self, ctx, *, query: str):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         query = query.strip('<>')
@@ -173,7 +173,7 @@ class MusicPlayer(commands.Cog):
         if not player.is_playing:
             await player.play()
     
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'음악을 유투브에서 검색해요')
     async def search(self, ctx, *, query: str):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         query = query.strip('<>')
@@ -213,7 +213,7 @@ class MusicPlayer(commands.Cog):
 
             return await ctx.respond(description, view=NumberButton(), delete_after=10)
     
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'현재 재생중인 음악을 스킵해요')
     async def skip(self, ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
 
@@ -223,7 +223,7 @@ class MusicPlayer(commands.Cog):
         await ctx.respond(f"🎵 **{player.current.title}**을 스킵할게요!")
         await player.skip()
     
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'재생 목록에 있는 음악을 제거해요 /remove 번호(/queue로 확인 가능)')
     async def remove(self, ctx, *, number: int):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         
@@ -233,13 +233,13 @@ class MusicPlayer(commands.Cog):
         await ctx.respond(f"🗑️ {player.queue[number - 1].title}을 목록에서 삭제했어요!")
         del player.queue[number - 1]
 
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'재생 목록에 있는 음악들을 모두 제거해요')
     async def clear(self, ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         player.queue.clear()
         return await ctx.respond(f"🗑️ 음악 목록을 싹 비웠어요!")
     
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'재생 목록을 출력해요')
     async def queue(self, ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if not player.queue:
@@ -251,11 +251,11 @@ class MusicPlayer(commands.Cog):
         embed = discord.Embed(description=description, color=discord.Color.blurple())
         return await ctx.respond(embed=embed)
 
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'혜팡이를 원하는 음성 채널로 이동시켜요')
     async def join(self, ctx):
         await ctx.respond(f"↖️ `{ctx.author.voice.channel.name}`으로 채널을 이동했어요!")
 
-    @commands.slash_command(guild_ids=guild_ids)
+    @commands.slash_command(guild_ids=guild_ids, description=f'혜팡이 나가!!!')
     async def leave(self, ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
 
